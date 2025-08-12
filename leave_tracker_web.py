@@ -234,4 +234,4 @@ if "edit_index" in st.session_state and st.session_state.edit_index is not None 
                 st.success("Leave updated successfully")
                 st.session_state.edit_index = None
                 st.rerun()
-�
+
