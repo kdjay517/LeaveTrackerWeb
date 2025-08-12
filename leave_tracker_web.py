@@ -135,8 +135,7 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
                     "No. of Days",
                     format="%d",
                     help="Number of days requested for leave",
-                    width="small",
-                    align="center"
+                    width="small"
                 )
             }
         )
@@ -228,8 +227,7 @@ else:
                   "No. of Days",
                   format="%d",
                   help="Number of days requested for leave",
-                  width="small",
-                  align="center"
+                  width="small"
               )
           }
       )
