@@ -123,7 +123,11 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
         if selected_month != "All":
             filtered_data = leave_data[leave_data['From Date'].dt.strftime('%B %Y') == selected_month]
 
-        st.dataframe(filtered_data.reset_index(drop=True), use_container_width=True)
+        # Convert date columns to DD-MMM-YYYY strings for display
+        display_data = filtered_data.copy()
+        display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
+        display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+        st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
 
         # Use a selectbox instead of row selection for a more reliable mobile experience
         st.markdown("---")
@@ -131,7 +135,7 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
         
         # Create a list of options for the selectbox
         options = ["Select a record to edit/delete"] + [
-            f"{row['Name']} | {row['From Date'].strftime('%Y-%m-%d')} to {row['To Date'].strftime('%Y-%m-%d')}" 
+            f"{row['Name']} | {row['From Date'].strftime('%d-%b-%Y')} to {row['To Date'].strftime('%d-%b-%Y')}" 
             for index, row in filtered_data.iterrows()
         ]
         selected_record_str = st.selectbox("Choose a record", options)
@@ -146,7 +150,7 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
             # Find the index in the original dataframe
             selected_original_idx = filtered_data[
                 (filtered_data['Name'] == record_name) &
-                (filtered_data['From Date'].dt.strftime('%Y-%m-%d') == record_dates[0])
+                (filtered_data['From Date'].dt.strftime('%d-%b-%Y') == record_dates[0])
             ].index[0]
             
             col1, col2 = st.columns(2)
@@ -200,7 +204,11 @@ else:
       if selected_month != "All":
           filtered_data = employee_leave_data[employee_leave_data['From Date'].dt.strftime('%B %Y') == selected_month]
       
-      st.dataframe(filtered_data.reset_index(drop=True), use_container_width=True)
+      # Convert date columns to DD-MMM-YYYY strings for display
+      display_data = filtered_data.copy()
+      display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
+      display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+      st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
     else:
       st.info("No leave records available for you.")
 
@@ -234,4 +242,3 @@ if "edit_index" in st.session_state and st.session_state.edit_index is not None 
                 st.success("Leave updated successfully")
                 st.session_state.edit_index = None
                 st.rerun()
-
