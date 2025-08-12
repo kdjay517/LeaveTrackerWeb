@@ -125,16 +125,17 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
 
         # Use st.dataframe for a clean, responsive table with row selection
         st.write("Click on a row to select it for editing or deletion.")
+        
+        # Use a new variable for the dataframe and check its selection
         selected_rows = st.dataframe(
             filtered_data.reset_index(drop=True),
             use_container_width=True,
-            on_select='row',
             selection_mode='single-row'
         )
 
         # Check if a row is selected and display buttons
-        if selected_rows:
-            selected_index = selected_rows['index'][0]
+        if selected_rows and selected_rows["selection"]["rows"]:
+            selected_index = selected_rows["selection"]["rows"][0]
             st.session_state.selected_row_index = selected_index
             st.markdown("---")
             col1, col2 = st.columns(2)
@@ -148,6 +149,8 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
                 st.success("Leave deleted successfully")
                 st.session_state.selected_row_index = None
                 st.rerun()
+        else:
+            st.session_state.selected_row_index = None
     else:
         st.info("No leave records available.")
 
@@ -224,4 +227,3 @@ if "edit_index" in st.session_state and st.session_state.edit_index is not None 
                 st.success("Leave updated successfully")
                 st.session_state.edit_index = None
                 st.rerun()
-
