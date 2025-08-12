@@ -127,13 +127,14 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
         display_data = filtered_data.copy()
         display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
         display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+        # Convert 'No. of Days' to string to force left alignment
+        display_data['No. of Days'] = display_data['No. of Days'].astype(str)
         st.dataframe(
             display_data.reset_index(drop=True),
             use_container_width=True,
             column_config={
-                "No. of Days": st.column_config.NumberColumn(
+                "No. of Days": st.column_config.TextColumn(
                     "No. of Days",
-                    format="%d",
                     help="Number of days requested for leave",
                     width="small"
                 )
@@ -219,13 +220,14 @@ else:
       display_data = filtered_data.copy()
       display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
       display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+      # Convert 'No. of Days' to string to force left alignment
+      display_data['No. of Days'] = display_data['No. of Days'].astype(str)
       st.dataframe(
           display_data.reset_index(drop=True),
           use_container_width=True,
           column_config={
-              "No. of Days": st.column_config.NumberColumn(
+              "No. of Days": st.column_config.TextColumn(
                   "No. of Days",
-                  format="%d",
                   help="Number of days requested for leave",
                   width="small"
               )
