@@ -178,7 +178,7 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
 # EMPLOYEE VIEW
 # ========================
 else:
-    st.subheader(f"📋 {name}'s Leave Records")
+    st.subheader("📋 Add Your Leave")
     from_date = st.date_input("From Date", date.today())
     to_date = st.date_input("To Date", date.today())
     if st.button("Add Leave"):
