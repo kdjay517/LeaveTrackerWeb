@@ -50,8 +50,11 @@ def save_data(df):
     df_to_save = df.copy()
     # Check if the DataFrame is not empty before converting dates to avoid errors
     if not df_to_save.empty:
-        df_to_save["From Date"] = df_to_save["From Date"].dt.date
-        df_to_save["To Date"] = df_to_save["To Date"].dt.date
+        # Ensure the columns exist before trying to access .dt
+        if "From Date" in df_to_save.columns:
+            df_to_save["From Date"] = df_to_save["From Date"].dt.date
+        if "To Date" in df_to_save.columns:
+            df_to_save["To Date"] = df_to_save["To Date"].dt.date
     df_to_save.to_excel(EXCEL_FILE, index=False, encoding='utf-8')
 
 def calculate_days(from_date, to_date):
@@ -128,6 +131,8 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
         display_data = filtered_data.copy()
         display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
         display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+        # Convert 'No. of Days' to string to force left alignment
+        display_data['No. of Days'] = display_data['No. of Days'].astype(str)
         st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
         
         # Use a selectbox for a more reliable mobile experience
@@ -205,6 +210,8 @@ else:
       display_data = filtered_data.copy()
       display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
       display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+      # Convert 'No. of Days' to string to force left alignment
+      display_data['No. of Days'] = display_data['No. of Days'].astype(str)
       st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
     else:
       st.info("No leave records available for you.")
