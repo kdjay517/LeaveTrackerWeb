@@ -221,7 +221,7 @@ else:
       st.info("No leave records available for you.")
 
 
-# ========================
+# =======================
 # EDIT MODE
 # ========================
 if "edit_index" in st.session_state and st.session_state.edit_index is not None and name == "Gupta Shamit" and st.session_state.logged_in:
