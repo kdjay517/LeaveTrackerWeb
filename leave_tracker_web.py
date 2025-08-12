@@ -48,9 +48,10 @@ def load_data():
 def save_data(df):
     """Saves the DataFrame to the Excel file."""
     df_to_save = df.copy()
-    # Convert dates back to a date-only format before saving to Excel
-    df_to_save["From Date"] = df_to_save["From Date"].dt.date
-    df_to_save["To Date"] = df_to_save["To Date"].dt.date
+    # Check if the DataFrame is not empty before converting dates to avoid errors
+    if not df_to_save.empty:
+        df_to_save["From Date"] = df_to_save["From Date"].dt.date
+        df_to_save["To Date"] = df_to_save["To Date"].dt.date
     df_to_save.to_excel(EXCEL_FILE, index=False, encoding='utf-8')
 
 def calculate_days(from_date, to_date):
