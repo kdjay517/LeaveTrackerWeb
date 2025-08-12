@@ -127,49 +127,33 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
         display_data = filtered_data.copy()
         display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
         display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
-        # Convert 'No. of Days' to string to force left alignment
-        display_data['No. of Days'] = display_data['No. of Days'].astype(str)
-        st.dataframe(
-            display_data.reset_index(drop=True),
-            use_container_width=True,
-            column_config={
-                "No. of Days": st.column_config.TextColumn(
-                    "No. of Days",
-                    help="Number of days requested for leave",
-                    width="small"
-                )
-            }
-        )
-
-        # Use a selectbox instead of row selection for a more reliable mobile experience
+        st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
+        
+        # Use a selectbox for a more reliable mobile experience
         st.markdown("---")
         st.subheader("Edit or Delete Leave Record")
         
-        # Create a list of options for the selectbox
-        options = ["Select a record to edit/delete"] + [
-            f"{row['Name']} | {row['From Date'].strftime('%d-%b-%Y')} to {row['To Date'].strftime('%d-%b-%Y')}" 
+        # Create a list of options for the selectbox and a mapping to original indices
+        options_map = {
+            f"{row['Name']} | {row['From Date'].strftime('%d-%b-%Y')} to {row['To Date'].strftime('%d-%b-%Y')}": index
             for index, row in filtered_data.iterrows()
-        ]
+        }
+        
+        options = ["Select a record to edit/delete"] + list(options_map.keys())
         selected_record_str = st.selectbox("Choose a record", options)
+        
+        selected_original_idx = None
+        if selected_record_str != "Select a record to edit/delete":
+            selected_original_idx = options_map[selected_record_str]
 
         # Check if a record is selected
-        if selected_record_str != "Select a record to edit/delete":
-            # Find the original index of the selected record
-            selected_record_parts = selected_record_str.split(" | ")
-            record_name = selected_record_parts[0]
-            record_dates = selected_record_parts[1].split(" to ")
-            
-            # Find the index in the original dataframe
-            selected_original_idx = filtered_data[
-                (filtered_data['Name'] == record_name) &
-                (filtered_data['From Date'].dt.strftime('%d-%b-%Y') == record_dates[0])
-            ].index[0]
-            
+        if selected_original_idx is not None:
             col1, col2 = st.columns(2)
             if col1.button("✏️ Edit Selected", key="edit_button"):
                 st.session_state.edit_index = selected_original_idx
                 st.rerun()
             if col2.button("🗑️ Delete Selected", key="delete_button"):
+                # Use .drop() with the original index
                 leave_data = leave_data.drop(selected_original_idx).reset_index(drop=True)
                 save_data(leave_data)
                 st.success("Leave deleted successfully")
@@ -220,19 +204,7 @@ else:
       display_data = filtered_data.copy()
       display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
       display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
-      # Convert 'No. of Days' to string to force left alignment
-      display_data['No. of Days'] = display_data['No. of Days'].astype(str)
-      st.dataframe(
-          display_data.reset_index(drop=True),
-          use_container_width=True,
-          column_config={
-              "No. of Days": st.column_config.TextColumn(
-                  "No. of Days",
-                  help="Number of days requested for leave",
-                  width="small"
-              )
-          }
-      )
+      st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
     else:
       st.info("No leave records available for you.")
 
