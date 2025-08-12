@@ -50,11 +50,13 @@ def save_data(df):
     df_to_save = df.copy()
     # Check if the DataFrame is not empty before converting dates to avoid errors
     if not df_to_save.empty:
-        # Ensure the columns exist before trying to access .dt
-        if "From Date" in df_to_save.columns:
-            df_to_save["From Date"] = df_to_save["From Date"].dt.date
-        if "To Date" in df_to_save.columns:
-            df_to_save["To Date"] = df_to_save["To Date"].dt.date
+        # Convert columns to datetime type before accessing .dt accessor
+        df_to_save["From Date"] = pd.to_datetime(df_to_save["From Date"], errors="coerce")
+        df_to_save["To Date"] = pd.to_datetime(df_to_save["To Date"], errors="coerce")
+        
+        # Now convert to date-only format
+        df_to_save["From Date"] = df_to_save["From Date"].dt.date
+        df_to_save["To Date"] = df_to_save["To Date"].dt.date
     df_to_save.to_excel(EXCEL_FILE, index=False, encoding='utf-8')
 
 def calculate_days(from_date, to_date):
