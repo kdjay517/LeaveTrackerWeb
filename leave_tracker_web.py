@@ -78,7 +78,7 @@ st.title("📅 Leave Tracker")
 # Session state
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-if "last_employee" not in st.session_state:
+if "last_employee" not in st.st.session_state:
     st.session_state.last_employee = None
 if "selected_row_index" not in st.session_state:
     st.session_state.selected_row_index = None
@@ -123,34 +123,41 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
         if selected_month != "All":
             filtered_data = leave_data[leave_data['From Date'].dt.strftime('%B %Y') == selected_month]
 
-        # Use st.dataframe for a clean, responsive table with row selection
-        st.write("Click on a row to select it for editing or deletion.")
-        
-        # Use a new variable for the dataframe and check its selection
-        selected_rows = st.dataframe(
-            filtered_data.reset_index(drop=True),
-            use_container_width=True,
-            selection_mode='single-row'
-        )
+        st.dataframe(filtered_data.reset_index(drop=True), use_container_width=True)
 
-        # Check if a row is selected and display buttons
-        if selected_rows and selected_rows["selection"]["rows"]:
-            selected_index = selected_rows["selection"]["rows"][0]
-            st.session_state.selected_row_index = selected_index
-            st.markdown("---")
+        # Use a selectbox instead of row selection for a more reliable mobile experience
+        st.markdown("---")
+        st.subheader("Edit or Delete Leave Record")
+        
+        # Create a list of options for the selectbox
+        options = ["Select a record to edit/delete"] + [
+            f"{row['Name']} | {row['From Date'].strftime('%Y-%m-%d')} to {row['To Date'].strftime('%Y-%m-%d')}" 
+            for index, row in filtered_data.iterrows()
+        ]
+        selected_record_str = st.selectbox("Choose a record", options)
+
+        # Check if a record is selected
+        if selected_record_str != "Select a record to edit/delete":
+            # Find the original index of the selected record
+            selected_record_parts = selected_record_str.split(" | ")
+            record_name = selected_record_parts[0]
+            record_dates = selected_record_parts[1].split(" to ")
+            
+            # Find the index in the original dataframe
+            selected_original_idx = filtered_data[
+                (filtered_data['Name'] == record_name) &
+                (filtered_data['From Date'].dt.strftime('%Y-%m-%d') == record_dates[0])
+            ].index[0]
+            
             col1, col2 = st.columns(2)
             if col1.button("✏️ Edit Selected", key="edit_button"):
-                st.session_state.edit_index = filtered_data.iloc[selected_index].name
+                st.session_state.edit_index = selected_original_idx
                 st.rerun()
             if col2.button("🗑️ Delete Selected", key="delete_button"):
-                del_idx = filtered_data.iloc[selected_index].name
-                leave_data = leave_data.drop(del_idx).reset_index(drop=True)
+                leave_data = leave_data.drop(selected_original_idx).reset_index(drop=True)
                 save_data(leave_data)
                 st.success("Leave deleted successfully")
-                st.session_state.selected_row_index = None
                 st.rerun()
-        else:
-            st.session_state.selected_row_index = None
     else:
         st.info("No leave records available.")
 
