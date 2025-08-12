@@ -4,6 +4,66 @@ import os
 from datetime import date
 from io import BytesIO
 
+# Add this at the top of your main Streamlit file, before rendering the table
+st.markdown(
+    """
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        word-wrap: break-word;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    @media (max-width: 600px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+            width: 100%;
+        }
+        thead tr {
+            display: none;
+        }
+        tr {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        td {
+            text-align: right;
+            position: relative;
+            padding-left: 50%;
+        }
+        td::before {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 45%;
+            white-space: nowrap;
+            text-align: left;
+            font-weight: bold;
+        }
+        td:nth-of-type(1)::before { content: "S.No"; }
+        td:nth-of-type(2)::before { content: "Name"; }
+        td:nth-of-type(3)::before { content: "From Date"; }
+        td:nth-of-type(4)::before { content: "To Date"; }
+        td:nth-of-type(5)::before { content: "No. of Days"; }
+        td:nth-of-type(6)::before { content: "Edit"; }
+        td:nth-of-type(7)::before { content: "Delete"; }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Then your existing table rendering logic stays exactly the same
+
+
 # ========================
 # CONFIG
 # ========================
