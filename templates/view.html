@@ -1,18 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <title>Leave Records</title>
+    <title>Leave Records</title>
 </head>
-<body class="container py-4">
-  <h3>Leave Records</h3>
-  <div class="mb-3">
-    <a href="/" class="btn btn-outline-primary">Submit</a>
-    <a href="/export" class="btn btn-success ms-2">Export Excel</a>
-  </div>
-  <div>
-    {{ table_html | safe }}
-  </div>
+<body>
+<h2>Leave Records</h2>
+<form method="GET">
+    <label>Filter by Month:</label>
+    <select name="month">
+        <option value="">-- All Months --</option>
+        {% for m in months %}
+            <option value="{{ m }}">{{ m }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+    <br>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Leave Date</th>
+            <th>Reason</th>
+            <th>Actions</th>
+        </tr>
+        {% for row in records %}
+        <tr>
+            <td>{{ row["ID"] }}</td>
+            <td>{{ row["Name"] }}</td>
+            <td>{{ row["Leave Date"] }}</td>
+            <td>{{ row["Reason"] }}</td>
+            <td>
+                <a href="/edit/{{ row['ID'] }}">Edit</a> |
+                <a href="/delete/{{ row['ID'] }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
