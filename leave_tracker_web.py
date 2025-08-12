@@ -113,7 +113,7 @@ leave_data = load_data()
 # ADMIN VIEW
 # ========================
 if name == "Gupta Shamit" and st.session_state.logged_in:
-    st.subheader("📜 All Leave Records")
+    st.subheader("📋 All Leave Records")
     
     if not leave_data.empty:
         months = leave_data['From Date'].dt.strftime('%B %Y').unique()
@@ -178,7 +178,7 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
 # EMPLOYEE VIEW
 # ========================
 else:
-    st.subheader("📋 Add Your Leave")
+    st.subheader(f"📋 {name}'s Leave Records")
     from_date = st.date_input("From Date", date.today())
     to_date = st.date_input("To Date", date.today())
     if st.button("Add Leave"):
@@ -192,7 +192,7 @@ else:
             save_data(leave_data)
             st.success(f"Leave added: {from_date} → {to_date} ({no_days} days)")
 
-    st.subheader(f"� {name}'s Leave Records")
+    st.subheader(f"📋 {name}'s Leave Records")
     employee_leave_data = leave_data[leave_data['Name'] == name]
 
     if not employee_leave_data.empty:
