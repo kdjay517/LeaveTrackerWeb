@@ -22,7 +22,7 @@ ADMIN_PASS = "password123"
 # ========================
 if not os.path.exists(EXCEL_FILE):
     df_init = pd.DataFrame(columns=["Name", "From Date", "To Date", "No. of Days"])
-    df_init.to_excel(EXCEL_FILE, index=False, encoding='utf-8')
+    df_init.to_excel(EXCEL_FILE, index=False)
 
 # ========================
 # HELPER FUNCTIONS
@@ -59,7 +59,9 @@ def save_data(df):
         df_to_save["From Date"] = df_to_save["From Date"].dt.date
         df_to_save["To Date"] = df_to_save["To Date"].dt.date
         
-    df_to_save.to_excel(EXCEL_FILE, index=False, encoding='utf-8')
+    # write without the encoding argument (openpyxl engine doesn't accept encoding)
+    df_to_save.to_excel(EXCEL_FILE, index=False)
+
 
 def calculate_days(from_date, to_date):
     """Calculates the number of days between two dates."""
