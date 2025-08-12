@@ -78,7 +78,7 @@ st.title("📅 Leave Tracker")
 # Session state
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-if "last_employee" not in st.st.session_state:
+if "last_employee" not in st.session_state:
     st.session_state.last_employee = None
 if "selected_row_index" not in st.session_state:
     st.session_state.selected_row_index = None
@@ -188,7 +188,7 @@ else:
             save_data(leave_data)
             st.success(f"Leave added: {from_date} → {to_date} ({no_days} days)")
 
-    st.subheader(f"📜 {name}'s Leave Records")
+    st.subheader(f"� {name}'s Leave Records")
     employee_leave_data = leave_data[leave_data['Name'] == name]
 
     if not employee_leave_data.empty:
@@ -234,3 +234,4 @@ if "edit_index" in st.session_state and st.session_state.edit_index is not None 
                 st.success("Leave updated successfully")
                 st.session_state.edit_index = None
                 st.rerun()
+�
