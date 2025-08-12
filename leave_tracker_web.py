@@ -219,7 +219,7 @@ else:
 if "edit_index" in st.session_state and st.session_state.edit_index is not None and name == "Gupta Shamit" and st.session_state.logged_in:
     idx = st.session_state.edit_index
     row = leave_data.loc[idx]
-    st.subheader(f"✏️ Edit Leave - {row['Name']}")
+    st.subheader("✏️ Edit Leave")
     
     with st.form(key="edit_form"):
         # Ensure we have datetime objects for st.date_input
