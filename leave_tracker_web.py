@@ -135,8 +135,10 @@ if name == "Gupta Shamit" and st.session_state.logged_in:
 
         # Convert date columns to DD-MMM-YYYY strings for display
         display_data = filtered_data.copy()
-        display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
-        display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+        display_data['From Date'] = pd.to_datetime(display_data['From Date'], errors='coerce').dt.strftime('%d-%b-%Y')
+
+        display_data['To Date'] = pd.to_datetime(display_data['To Date'], errors='coerce').dt.strftime('%d-%b-%Y')
+
         # Convert 'No. of Days' to string to force left alignment
         display_data['No. of Days'] = display_data['No. of Days'].astype(str)
         st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
@@ -214,8 +216,10 @@ else:
       
       # Convert date columns to DD-MMM-YYYY strings for display
       display_data = filtered_data.copy()
-      display_data['From Date'] = display_data['From Date'].dt.strftime('%d-%b-%Y')
-      display_data['To Date'] = display_data['To Date'].dt.strftime('%d-%b-%Y')
+      display_data['From Date'] = pd.to_datetime(display_data['From Date'], errors='coerce').dt.strftime('%d-%b-%Y')
+
+      display_data['To Date'] = pd.to_datetime(display_data['To Date'], errors='coerce').dt.strftime('%d-%b-%Y')
+
       # Convert 'No. of Days' to string to force left alignment
       display_data['No. of Days'] = display_data['No. of Days'].astype(str)
       st.dataframe(display_data.reset_index(drop=True), use_container_width=True)
